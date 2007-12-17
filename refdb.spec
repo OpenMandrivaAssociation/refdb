@@ -42,7 +42,6 @@ Buildrequires:	perl(XML::Parser)
 
 #BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 #BuildRoot:	%{_tmppath}/%{name}-%{version}
-BuildRoot:	%{_tmppath}/%{name}-0.9.8-1
 
 %description
 RefDB is a reference database and bibliography tool for
