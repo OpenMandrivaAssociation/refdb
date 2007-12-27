@@ -1,47 +1,27 @@
-%define		name refdb
-%define		version 0.9.8.1
-%define		rel pre9
-#%define		release %mkrel 0.%{rel}.1
-%define		release %mkrel 1
+%define rel	1
 
 Summary:	RefDB is a reference database and bibliography tool
-
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
-#Source0:	http://refdb.sourceforge.net/pre/refdb-%{version}-%{rel}.tar.bz2
-#Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/refdb-%{version}.tar.bz2
-Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/refdb-0.9.8-1.tar.bz2
+Name:		refdb
+Version:	0.9.9
+Release:	%mkrel 1
+Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/%{name}-%{version}-%{rel}.tar.gz
 Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
-Patch1:		refdbsearch.php.in.patch
-
-License:	GPL
+License:	GPLv2+
 Group:		Sciences/Computer science
-Url:		http://refdb.sourceforge.net
-
-Requires(pre):	rpm-helper
+URL:		http://refdb.sourceforge.net
 Requires:	apache-mod_php => 5
-Requires:	readline
-Buildrequires:	btparse
-Buildrequires:	libdbi-devel	
-Buildrequires:	libexpat-devel
-Buildrequires:	libncurses-devel
+BuildRequires:	btparse
+BuildRequires:	libdbi-devel	
+BuildRequires:	libexpat-devel
+BuildRequires:	libncurses-devel
 BuildRequires:	libreadline-devel
-Buildrequires:	perl(MARC::Charset)
-Buildrequires:	perl(MARC::Record)
-Buildrequires:	perl(RefDB)
-Buildrequires:	perl(Term::Clui)
-Buildrequires:	perl(Text::Iconv)
-Buildrequires:	perl(XML::Parser)
-#Buildrequires:		docbook-style-xsl
-#Buildrequires:		openjade
-#Buildrequires:		tei-xsl
-#Buildrequires:		libxslt-proc
-#Buildrequires:		tidy
-
-#BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
-#BuildRoot:	%{_tmppath}/%{name}-%{version}
+BuildRequires:	perl(MARC::Charset)
+BuildRequires:	perl(MARC::Record)
+BuildRequires:	perl(RefDB)
+BuildRequires:	perl(Term::Clui)
+BuildRequires:	perl(Text::Iconv)
+BuildRequires:	perl(XML::Parser)
 
 %description
 RefDB is a reference database and bibliography tool for
@@ -56,17 +36,15 @@ Group:		Networking/Remote access
 %description	-n %{name}-clients
 Clients allowing to connect to the refdb server.
 
-%prep		rm -rf %{buildroot}
-#%setup -q -n	%{name}-%{version}-%{rel}
-#%setup -q -n	%{name}-%{version}
-%setup -q -n	%{name}-0.9.8-1
+%prep		
+rm -rf %{buildroot}
+%setup -q -n	%{name}-%{version}-%{rel}
 
 cp %{SOURCE1}	README.urpmi
 %patch0 -p0
-%patch1 -p0
 
 %build
-%configure --disable-rpath 
+%configure2_5x --disable-rpath 
 %make
 
 %install
@@ -78,22 +56,12 @@ install -D -m755 scripts/%{name} %{buildroot}/%{_initrddir}/%{name}
 
 # Web interface
 mkdir -p %{buildroot}/%{_var}/www/%{name}
-install	phpweb/admin.php \
-	phpweb/external.php \
-	phpweb/include.php \
-	phpweb/index.html \
-	phpweb/login.php \
-	phpweb/refdb-prl-del.php \
-	phpweb/refdbadd.html \
-	phpweb/refdbadd.php \
-	phpweb/refdbadmin.php \
-	phpweb/refdbdbquery.php \
-	phpweb/refdbkajquery.html \
-	phpweb/refdbkajsearch.php \
-	phpweb/refdblogout.php \
-	phpweb/*.css \
-	phpweb/refdbquery.html \
-	phpweb/refdbsearch.php %{buildroot}/%{_var}/www/%{name}
+mkdir -p %{buildroot}/%{_var}/www/%{name}/{css,images,includes,xsl}
+install	phpweb/index.php		%{buildroot}/%{_var}/www/%{name}
+install phpweb/css/*.css		%{buildroot}/%{_var}/www/%{name}/css
+install phpweb/images/{*.gif,*.png}	%{buildroot}/%{_var}/www/%{name}/images
+install phpweb/includes/*.php		%{buildroot}/%{_var}/www/%{name}/includes
+install phpweb/xsl/*.xsl		%{buildroot}/%{_var}/www/%{name}/xsl
 
 # apache configuration
 install -d -m755 %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
@@ -130,8 +98,7 @@ EOphpini
 %{__rm} -f	doc/citestylex/ele-desc/*~
 
 # Clean some paths introduced by the install-sh scrip
-#mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} %{buildroot}/%{_datadir}/doc/%{name}-%{version}
-mv %{buildroot}/%{_datadir}/doc/%{name}-0.9.8-1 %{buildroot}/%{_datadir}/doc/%{name}-%{version}
+mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} %{buildroot}/%{_datadir}/doc/%{name}
 
 %clean
 %{__rm} -rf	%{buildroot}
@@ -163,12 +130,11 @@ chmod 1777 %{_var}/www/%{name}
 %attr(644,root,root)	%{_var}/www/%{name}/*
 %config(noreplace)	%{webappconfdir}/%{name}.conf
 %doc doc/*
-%doc README.urpmi AUTHORS ChangeLog COPYING INSTALL NEWS README UPGRADING
+%doc README.urpmi AUTHORS ChangeLog INSTALL NEWS README UPGRADING
 
 %files -n %{name}-clients
 %defattr(-,root,root,0755)
 %{_bindir}/refdbc
 %{_bindir}/refdba
 %{_bindir}/refdbib
-
 
