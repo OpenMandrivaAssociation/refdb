@@ -9,6 +9,7 @@ Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
 License:	GPLv2+
 Group:		Sciences/Computer science
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://refdb.sourceforge.net
 Requires:	apache-mod_php => 5
 BuildRequires:	btparse
