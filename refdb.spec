@@ -1,6 +1,6 @@
 %define rel	1
 
-Summary:	RefDB is a reference database and bibliography tool
+Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
 Release:	%mkrel 1
