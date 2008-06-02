@@ -50,7 +50,7 @@ cp %{SOURCE1}	README.urpmi
 
 %install
 %{__rm} -rf %{buildroot}
-mkdir -p %{buildroot}/%{_localstatedir}/%{name}/db
+mkdir -p %{buildroot}/%{_localstatedir}/lib/%{name}/db
 
 # LSB and pinit compliant initscript
 install -D -m755 scripts/%{name} %{buildroot}/%{_initrddir}/%{name}
@@ -124,7 +124,7 @@ chmod 1777 %{_var}/www/%{name}
 %exclude	%{_datadir}/%{name}/www
 %{_datadir}/%{name}*
 %{_initrddir}/refdb
-%{_localstatedir}/%{name}/db
+%{_localstatedir}/lib/%{name}/db
 %{_mandir}/*/*
 %config(noreplace)	%{_sysconfdir}/%{name}/*
 %config(noreplace)	%{_sysconfdir}/php.d/A53_%{name}.ini
