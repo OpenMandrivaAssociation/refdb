@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 4
+Release:	%mkrel 5
 Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/%{name}-%{version}-%{rel}.tar.gz
 Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
