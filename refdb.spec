@@ -3,14 +3,14 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 5
+Release:	%mkrel 6
+License:	GPLv2+
+Group:		Sciences/Computer science
+URL:		http://refdb.sourceforge.net
 Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/%{name}-%{version}-%{rel}.tar.gz
 Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
-License:	GPLv2+
-Group:		Sciences/Computer science
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-URL:		http://refdb.sourceforge.net
+Patch1:		refdb-0.9.9-1-fix-format-errors.patch
 Requires:	apache-mod_php => 5
 BuildRequires:	btparse
 BuildRequires:	libdbi-devel	
@@ -23,6 +23,7 @@ BuildRequires:	perl(RefDB)
 BuildRequires:	perl(Term::Clui)
 BuildRequires:	perl(Text::Iconv)
 BuildRequires:	perl(XML::Parser)
+BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
 RefDB is a reference database and bibliography tool for
@@ -38,11 +39,11 @@ Group:		Networking/Remote access
 Clients allowing to connect to the refdb server.
 
 %prep		
-rm -rf %{buildroot}
 %setup -q -n	%{name}-%{version}-%{rel}
 
 cp %{SOURCE1}	README.urpmi
-%patch0 -p0
+%patch0 -p 0
+%patch1 -p 1
 
 %build
 %configure2_5x --disable-rpath 
