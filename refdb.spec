@@ -62,37 +62,29 @@ mkdir -p %{buildroot}/%{_localstatedir}/lib/%{name}/db
 install -D -m755 scripts/%{name} %{buildroot}/%{_initrddir}/%{name}
 
 # Web interface
-mkdir -p %{buildroot}/%{_var}/www/%{name}
-mkdir -p %{buildroot}/%{_var}/www/%{name}/{css,images,includes,xsl}
-install	phpweb/index.php		%{buildroot}/%{_var}/www/%{name}
-install phpweb/css/*.css		%{buildroot}/%{_var}/www/%{name}/css
-install phpweb/images/{*.gif,*.png}	%{buildroot}/%{_var}/www/%{name}/images
-install phpweb/includes/*.php		%{buildroot}/%{_var}/www/%{name}/includes
-install phpweb/xsl/*.xsl		%{buildroot}/%{_var}/www/%{name}/xsl
+mkdir -p %{buildroot}%{_datadir}/%{name}
+mkdir -p %{buildroot}%{_datadir}/%{name}/{css,images,includes,xsl}
+install	phpweb/index.php		%{buildroot}%{_datadir}/%{name}
+install phpweb/css/*.css		%{buildroot}%{_datadir}/%{name}/css
+install phpweb/images/{*.gif,*.png}	%{buildroot}%{_datadir}/%{name}/images
+install phpweb/includes/*.php		%{buildroot}%{_datadir}/%{name}/includes
+install phpweb/xsl/*.xsl		%{buildroot}%{_datadir}/%{name}/xsl
 
 # apache configuration
-install -d -m755 %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
-cat > %{buildroot}%{webappconfdir}/%{name}.conf << EORefDBconf
+install -d -m 755 %{buildroot}%{webappconfdir}
+cat > %{buildroot}%{webappconfdir}/%{name}.conf << EOR
 # RefDB Apache configuration
-Alias /%{name}/ "%{_var}/www/%{name}/"
+Alias /%{name} %{_datadir}/%{name}
 
-<Directory %{_var}/www/%{name}>
+<Directory %{_datadir}/%{name}>
 	Options +ExecCGI
-	AllowOverride None
 	Order allow,deny
 	Allow from all
-	AddType application/x-httpd-php .php .phtml
-</Directory>
-EORefDBconf
 
-# php ini
-install -d %{buildroot}%{_sysconfdir}/php.d/
-cat > %{buildroot}%{_sysconfdir}/php.d/A53_%{name}.ini << EOphpini
-;session.save_path = "/tmp"
-;session.use_cookies = 1
-session.auto_start = 1
-register_globals = On
-EOphpini
+    php_value session.auto_start = 1
+    php_value register_globals = On
+</Directory>
+EOF
 
 %makeinstall_std
 
@@ -105,7 +97,8 @@ EOphpini
 %{__rm} -f	doc/citestylex/ele-desc/*~
 
 # Clean some paths introduced by the install-sh scrip
-mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} %{buildroot}/%{_datadir}/doc/%{name}
+mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} \
+    %{buildroot}/%{_datadir}/doc/%{name}
 
 %clean
 %{__rm} -rf	%{buildroot}
@@ -115,7 +108,7 @@ mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} %{buildroot}/%{_datadi
 %_post_webapp
 %endif
 %_post_service	%{name}
-chmod 1777 %{_var}/www/%{name}
+chmod 1777 %{_datadir}/%{name}
 
 %preun
 %_preun_service	%{name}
@@ -138,7 +131,7 @@ chmod 1777 %{_var}/www/%{name}
 %{_mandir}/*/*
 %config(noreplace)	%{_sysconfdir}/%{name}/*
 %config(noreplace)	%{_sysconfdir}/php.d/A53_%{name}.ini
-%attr(644,root,root)	%{_var}/www/%{name}/*
+%attr(644,root,root)	%{_datadir}/%{name}/*
 %config(noreplace)	%{webappconfdir}/%{name}.conf
 %doc doc/*
 %doc README.urpmi AUTHORS ChangeLog INSTALL NEWS README UPGRADING
