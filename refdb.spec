@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
@@ -23,6 +23,11 @@ BuildRequires:	perl(RefDB)
 BuildRequires:	perl(Term::Clui)
 BuildRequires:	perl(Text::Iconv)
 BuildRequires:	perl(XML::Parser)
+Requires(post): rpm-helper
+Requires(preun): rpm-helper
+%if %mdkversion < 201010
+Requires(postun): rpm-helper
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
@@ -106,7 +111,9 @@ mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} %{buildroot}/%{_datadi
 %{__rm} -rf	%{buildroot}
 
 %post
-%{_post_webapp}
+%if %mdkversion < 201010
+%_post_webapp
+%endif
 %_post_service	%{name}
 chmod 1777 %{_var}/www/%{name}
 
@@ -114,7 +121,9 @@ chmod 1777 %{_var}/www/%{name}
 %_preun_service	%{name}
 
 %postun
-%{_postun_webapp}
+%if %mdkversion < 201010
+%_postun_webapp
+%endif
 
 %files
 %defattr(-,root,root,0755)
@@ -139,4 +148,3 @@ chmod 1777 %{_var}/www/%{name}
 %{_bindir}/refdbc
 %{_bindir}/refdba
 %{_bindir}/refdbib
-
