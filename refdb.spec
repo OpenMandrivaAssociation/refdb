@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 8
+Release:	%mkrel 7
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
@@ -19,6 +19,7 @@ BuildRequires:	libdbi-devel
 BuildRequires:	libexpat-devel
 BuildRequires:	libncurses-devel
 BuildRequires:	libreadline-devel
+BuildRequires:	gettext-devel
 BuildRequires:	perl(MARC::Charset)
 BuildRequires:	perl(MARC::Record)
 BuildRequires:	perl(RefDB)
