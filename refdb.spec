@@ -11,6 +11,8 @@ Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/%{name}-%{version}
 Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
 Patch1:		refdb-0.9.9-1-fix-format-errors.patch
+Patch2:		refdb-0.9.9-1-fix-underlinking.patch
+Patch3:		refdb-0.9.9-1-fix-doc-installation.patch
 Requires:	apache-mod_php => 5
 BuildRequires:	btparse
 BuildRequires:	libdbi-devel	
@@ -49,6 +51,9 @@ Clients allowing to connect to the refdb server.
 cp %{SOURCE1}	README.urpmi
 %patch0 -p 0
 %patch1 -p 1
+%patch2 -p 1
+%patch3 -p 1
+autoreconf
 
 %build
 %configure2_5x --disable-rpath 
@@ -64,15 +69,15 @@ install -D -m755 scripts/%{name} %{buildroot}/%{_initrddir}/%{name}
 # Web interface
 mkdir -p %{buildroot}%{_datadir}/%{name}
 mkdir -p %{buildroot}%{_datadir}/%{name}/{css,images,includes,xsl}
-install	phpweb/index.php		%{buildroot}%{_datadir}/%{name}
-install phpweb/css/*.css		%{buildroot}%{_datadir}/%{name}/css
+install	phpweb/index.php	%{buildroot}%{_datadir}/%{name}
+install phpweb/css/*.css	%{buildroot}%{_datadir}/%{name}/css
 install phpweb/images/{*.gif,*.png}	%{buildroot}%{_datadir}/%{name}/images
-install phpweb/includes/*.php		%{buildroot}%{_datadir}/%{name}/includes
-install phpweb/xsl/*.xsl		%{buildroot}%{_datadir}/%{name}/xsl
+install phpweb/includes/*.php	%{buildroot}%{_datadir}/%{name}/includes
+install phpweb/xsl/*.xsl	%{buildroot}%{_datadir}/%{name}/xsl
 
 # apache configuration
 install -d -m 755 %{buildroot}%{webappconfdir}
-cat > %{buildroot}%{webappconfdir}/%{name}.conf << EOR
+cat > %{buildroot}%{webappconfdir}/%{name}.conf << EOF
 # RefDB Apache configuration
 Alias /%{name} %{_datadir}/%{name}
 
@@ -88,17 +93,7 @@ EOF
 
 %makeinstall_std
 
-# Remove some documentation files
-%{__rm} -f	doc/*.xml
-%{__rm} -f	doc/Makefile*
-%{__rm} -f	doc/refdbmanualfig*
-%{__rm} -f	doc/refdb-manual.fo
-%{__rm} -rf	doc/include
-%{__rm} -f	doc/citestylex/ele-desc/*~
-
-# Clean some paths introduced by the install-sh scrip
-mv %{buildroot}/%{_datadir}/doc/%{name}-%{version}-%{rel} \
-    %{buildroot}/%{_datadir}/doc/%{name}
+find %{buildroot}%{_docdir} -name *~ | xargs rm -f
 
 %clean
 %{__rm} -rf	%{buildroot}
@@ -119,25 +114,22 @@ chmod 1777 %{_datadir}/%{name}
 %endif
 
 %files
-%defattr(-,root,root,0755)
-%exclude	%{_bindir}/refdbc
-%exclude	%{_bindir}/refdba
-%exclude	%{_bindir}/refdbib
+%defattr(-,root,root)
 %{_bindir}/*
-%exclude	%{_datadir}/%{name}/www
-%{_datadir}/%{name}*
+%exclude %{_bindir}/refdbc
+%exclude %{_bindir}/refdba
+%exclude %{_bindir}/refdbib
+%{_datadir}/%{name}
 %{_initrddir}/refdb
-%{_localstatedir}/lib/%{name}/db
+%{_localstatedir}/lib/%{name}
 %{_mandir}/*/*
-%config(noreplace)	%{_sysconfdir}/%{name}/*
-%config(noreplace)	%{_sysconfdir}/php.d/A53_%{name}.ini
-%attr(644,root,root)	%{_datadir}/%{name}/*
-%config(noreplace)	%{webappconfdir}/%{name}.conf
+%config(noreplace) %{_sysconfdir}/%{name}
+%config(noreplace) %{webappconfdir}/%{name}.conf
 %doc doc/*
 %doc README.urpmi AUTHORS ChangeLog INSTALL NEWS README UPGRADING
 
 %files -n %{name}-clients
-%defattr(-,root,root,0755)
+%defattr(-,root,root)
 %{_bindir}/refdbc
 %{_bindir}/refdba
 %{_bindir}/refdbib
