@@ -116,7 +116,6 @@ chmod 1777 %{_datadir}/%{name}
 
 %files
 %defattr(-,root,root)
-%{_bindir}/bib2ris
 %{_bindir}/bib2ris-utf8
 %{_bindir}/db2ris
 %{_bindir}/eenc
