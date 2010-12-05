@@ -116,10 +116,27 @@ chmod 1777 %{_datadir}/%{name}
 
 %files
 %defattr(-,root,root)
-%{_bindir}/*
-%exclude %{_bindir}/refdbc
-%exclude %{_bindir}/refdba
-%exclude %{_bindir}/refdbib
+%{_bindir}/bib2ris
+%{_bindir}/bib2ris-utf8
+%{_bindir}/db2ris
+%{_bindir}/eenc
+%{_bindir}/en2ris
+%{_bindir}/marc2ris
+%{_bindir}/med2ris
+%{_bindir}/refdb-backup
+%{_bindir}/refdb-init
+%{_bindir}/refdb-ms
+%{_bindir}/refdb-restore
+%{_bindir}/refdb-sruserver
+%{_bindir}/refdb_dos2unix
+%{_bindir}/refdb_latex2utf8txt
+%{_bindir}/refdbd
+%{_bindir}/refdbjade
+%{_bindir}/refdbsru
+%{_bindir}/refdbxml
+%{_bindir}/refdbxp
+%{_bindir}/runbib
+%{_bindir}/refdbnd
 %{_datadir}/%{name}
 %{_initrddir}/refdb
 %{_localstatedir}/lib/%{name}
