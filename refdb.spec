@@ -134,3 +134,4 @@ chmod 1777 %{_datadir}/%{name}
 %{_bindir}/refdbc
 %{_bindir}/refdba
 %{_bindir}/refdbib
+%{_bindir}/refdbctl
