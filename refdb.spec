@@ -1,9 +1,9 @@
-%define rel	2
+%define rel	1
 
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 8
+Release:	%mkrel 9
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
