@@ -1,0 +1,12 @@
+diff -Naur -x '*~' refdb-0.9.9-1/src/Makefile.am refdb-0.9.9-1-fix-underlinking/src/Makefile.am
+--- refdb-0.9.9-1/src/Makefile.am	2007-09-08 01:56:32.000000000 +0200
++++ refdb-0.9.9-1-fix-underlinking/src/Makefile.am	2010-02-07 21:03:26.000000000 +0100
+@@ -28,7 +28,7 @@
+ 
+ refdba_LDADD = @refdba_LDADD@
+ refdbc_LDADD = @refdbc_LDADD@
+-refdbd_LDADD = @refdbd_LDADD@ @LIBICONV@
++refdbd_LDADD = @refdbd_LDADD@ @LIBICONV@ -lm
+ bib2ris_LDADD = @bib2ris_LDADD@
+ main_db = @main_db@
+ main_meta = @main_meta@

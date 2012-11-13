@@ -1,0 +1,753 @@
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/bib2ris.c refdb-0.9.9-1-fix-format-errors/src/bib2ris.c
+--- refdb-0.9.9-1/src/bib2ris.c	2007-07-10 23:40:48.000000000 +0200
++++ refdb-0.9.9-1-fix-format-errors/src/bib2ris.c	2009-03-11 23:44:46.000000000 +0100
+@@ -502,7 +502,7 @@
+       return 1;
+     }
+     else {
+-      printf(html_string);
++      printf("%s", html_string);
+       free(html_string);
+     }
+   }
+@@ -851,7 +851,7 @@
+       return 1;
+     }
+     else {
+-      printf(html_string);
++      printf("%s", html_string);
+       free(html_string);
+     }
+   }
+@@ -1890,7 +1890,7 @@
+     fprintf(stderr, "%s\n", string);
+   }
+   else if (n_log_dest == 1) { /* output via syslog */
+-    syslog(priority, string);
++    syslog(priority, "%s", string);
+   }
+   else { /* output in user-defined logfile */
+     time(&the_time);
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/cgi.c refdb-0.9.9-1-fix-format-errors/src/cgi.c
+--- refdb-0.9.9-1/src/cgi.c	2007-07-10 23:40:48.000000000 +0200
++++ refdb-0.9.9-1-fix-format-errors/src/cgi.c	2009-03-11 23:13:16.000000000 +0100
+@@ -87,11 +87,11 @@
+   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ void write_err(char* message) {
+   if (!n_cgi) {
+-    fprintf(stderr, message);
++    fprintf(stderr, "%s", message);
+   }
+   else { /* send cgi type string */
+     printf("Content-type: text/plain\n\n");
+-    printf(message);
++    printf("%s", message);
+   }
+ }
+ 
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/refdba.c refdb-0.9.9-1-fix-format-errors/src/refdba.c
+--- refdb-0.9.9-1/src/refdba.c	2007-07-10 23:40:48.000000000 +0200
++++ refdb-0.9.9-1-fix-format-errors/src/refdba.c	2009-03-11 23:42:39.000000000 +0100
+@@ -1033,7 +1033,7 @@
+   numbyte = tiwrite(n_sockfd, outbuffer, TERM_YES);
+   if (numbyte == -1) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1041,7 +1041,7 @@
+ 
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1136,7 +1136,7 @@
+   /* read data */
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1194,7 +1194,7 @@
+   /* read summary */
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1214,7 +1214,7 @@
+ 
+   closepager(pagerfp);
+ 
+-  fprintf(stderr, inbuffer);
++  fprintf(stderr, "%s", inbuffer);
+ 
+   n_broken_pipe = 0;
+   delete_all_lilimem(&sentinel);
+@@ -1486,7 +1486,7 @@
+ 
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1560,14 +1560,14 @@
+   numbyte = tiwrite(n_sockfd, outbuffer, TERM_YES);
+   if (numbyte == -1) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     close(n_sockfd);
+     return 1;
+   }
+ 
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1625,7 +1625,7 @@
+ 
+   if ((n_server_status = read_status(n_sockfd))) {
+     delete_all_lilimem(&sentinel);
+-    fprintf(stderr, get_status_msg(n_server_status));
++    fprintf(stderr, "%s", get_status_msg(n_server_status));
+     fprintf(stderr, "\n");
+     close(n_sockfd);
+     return 1;
+@@ -1633,7 +1633,7 @@
+ 
+   numbyte = tread(n_sockfd, inbuffer, OUTBUF_LEN);
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     delete_all_lilimem(&sentinel);
+     close(n_sockfd);
+     n_broken_pipe = 0;
+@@ -1645,7 +1645,7 @@
+ 
+   closepager(pagerfp);
+ 
+-  fprintf(stderr, inbuffer);
++  fprintf(stderr, "%s", inbuffer);
+ 
+   close(n_sockfd);
+   return (0);
+@@ -1882,7 +1882,7 @@
+ 
+   /* check server status */
+   if ((cs_status = read_status(n_sockfd))) {
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     return 1;
+   }
+@@ -1975,7 +1975,7 @@
+ 	  /*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	  if (numbyte == -1) {
+ 	    /* timeout while reading */
+-	    fprintf(stderr, get_status_msg(109));
++	    fprintf(stderr, "%s", get_status_msg(109));
+ 	    result = 1;
+ 	    goto cleanup;
+ 	  }
+@@ -1997,7 +1997,7 @@
+ /* 	goto cleanup; */
+       }
+       else {
+-	fprintf(stderr, get_status_msg(cs_status));
++	fprintf(stderr, "%s", get_status_msg(cs_status));
+ 	fprintf(stderr, "\n");
+ 	result = 1;
+ 	goto cleanup;
+@@ -2450,7 +2450,7 @@
+     fprintf(stderr, "%s\n", string);
+   }
+   else if (n_log_dest == 1) { /* output via syslog */
+-    syslog(priority, string);
++    syslog(priority, "%s", string);
+   }
+   else { /* output in user-defined logfile */
+     time(&the_time);
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/refdbc.c refdb-0.9.9-1-fix-format-errors/src/refdbc.c
+--- refdb-0.9.9-1/src/refdbc.c	2007-11-01 21:22:33.000000000 +0100
++++ refdb-0.9.9-1-fix-format-errors/src/refdbc.c	2009-03-11 23:40:17.000000000 +0100
+@@ -1197,7 +1197,7 @@
+   numbyte = 0;
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -1602,7 +1602,7 @@
+   numbyte = tiwrite(slvals.n_sockfd, cmd_buffer, TERM_YES);
+   LOG_PRINT(LOG_DEBUG, cmd_buffer);
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     fprintf(stderr, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -1613,7 +1613,7 @@
+ 
+   /* read acknowledgement from application server */
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -2238,7 +2238,7 @@
+   numbyte = 0;
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -2281,7 +2281,7 @@
+     if (cs_status != 402 /* last dataset */
+ 	&& cs_status != 404) { /* finished dataset */
+       cgi_header(CGI_PLAIN);
+-      fprintf(errstream, get_status_msg(cs_status));
++      fprintf(errstream, "%s", get_status_msg(cs_status));
+       fprintf(errstream, "\n");
+       if (slvals.n_file_open || slvals.n_file_append) {
+ 	close_outfile(pagerfp);
+@@ -2322,7 +2322,7 @@
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     delete_all_lilimem(&sentinel);
+     return 1;
+@@ -2330,7 +2330,7 @@
+ 	
+   numbyte = tread(slvals.n_sockfd, slvals.inbuffer, OUTBUF_LEN);
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     fprintf(stderr, "\n");
+     n_broken_pipe = 0;
+     delete_all_lilimem(&sentinel);
+@@ -2349,7 +2349,7 @@
+ 
+   close(slvals.n_sockfd);
+ 
+-  fprintf(errstream, slvals.inbuffer);
++  fprintf(errstream, "%s", slvals.inbuffer);
+ 
+   delete_all_lilimem(&sentinel);
+ 
+@@ -3465,7 +3465,7 @@
+ 
+   if (cs_status == 701) {
+     /* character conversion could not be initialized */
+-    fprintf(errstream, get_status_msg(701));
++    fprintf(errstream, "%s", get_status_msg(701));
+     fprintf(errstream, "\n");
+   }
+   else if (cs_status) {
+@@ -3559,7 +3559,7 @@
+ 	/*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	if (numbyte == -1) {
+ 	  /* timeout while reading */
+-	  fprintf(stderr, get_status_msg(109));
++	  fprintf(stderr, "%s", get_status_msg(109));
+ 	  result = 1;
+ 	  goto cleanup;
+ 	}
+@@ -3581,7 +3581,7 @@
+       /* 	goto cleanup; */
+     }
+     else {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       result = 1;
+       goto cleanup;
+@@ -3597,7 +3597,7 @@
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     return 1;
+   }
+ 
+@@ -4133,7 +4133,7 @@
+   /* todo: is a 701 possible here? */
+   if (cs_status == 701) {
+     /* character conversion could not be initialized */
+-    fprintf(errstream, get_status_msg(701));
++    fprintf(errstream, "%s", get_status_msg(701));
+     fprintf(errstream, "\n");
+   }
+   else if (cs_status) {
+@@ -4217,7 +4217,7 @@
+ 	/*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	if (numbyte == -1) {
+ 	  /* timeout while reading */
+-	  fprintf(stderr, get_status_msg(109));
++	  fprintf(stderr, "%s", get_status_msg(109));
+ 	  result = 1;
+ 	  goto cleanup;
+ 	}
+@@ -4239,7 +4239,7 @@
+       /* 	goto cleanup; */
+     }
+     else {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       result = 1;
+       goto cleanup;
+@@ -4250,7 +4250,7 @@
+   do {
+     numbyte = tread(n_sockfd, inbuffer, OUTBUF_LEN);
+     if (numbyte == -1) {
+-      fprintf(stderr, get_status_msg(109));
++      fprintf(stderr, "%s", get_status_msg(109));
+       if (n_file_open || n_file_append) {
+ 	close_outfile(pagerfp);
+       }
+@@ -4306,7 +4306,7 @@
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     return 1;
+   }
+ 
+@@ -4331,7 +4331,7 @@
+     closepager(pagerfp);
+   }
+ 
+-  fprintf(errstream, inbuffer);
++  fprintf(errstream, "%s", inbuffer);
+ 
+ cleanup:
+   /*    printf("%s\n", inbuffer); */
+@@ -4632,7 +4632,7 @@
+   LOG_PRINT(LOG_DEBUG, cmd_buffer);
+   if (numbyte == -1) {
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(110));
++    fprintf(errstream, "%s", get_status_msg(110));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -4642,7 +4642,7 @@
+   numbyte = 0;
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -5157,7 +5157,7 @@
+   numbyte = 0;
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     close(slvals.n_sockfd);
+     delete_all_lilimem(&sentinel);
+@@ -5200,7 +5200,7 @@
+     if (cs_status != 402 /* last dataset */
+ 	&& cs_status != 404) { /* finished dataset */
+       cgi_header(CGI_PLAIN);
+-      fprintf(errstream, get_status_msg(cs_status));
++      fprintf(errstream, "%s", get_status_msg(cs_status));
+       fprintf(errstream, "\n");
+       if (slvals.n_file_open || slvals.n_file_append) {
+ 	close_outfile(pagerfp);
+@@ -5238,14 +5238,14 @@
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     return 1;
+   }
+ 	
+   numbyte = tread(slvals.n_sockfd, slvals.inbuffer, OUTBUF_LEN);
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     fprintf(stderr, "\n");
+     n_broken_pipe = 0;
+     return 1;
+@@ -5263,7 +5263,7 @@
+ 
+   close(slvals.n_sockfd);
+ 
+-  fprintf(errstream, slvals.inbuffer);
++  fprintf(errstream, "%s", slvals.inbuffer);
+ 
+   delete_all_lilimem(&sentinel);
+ 
+@@ -6075,7 +6075,7 @@
+     fprintf(stderr, "%s\n", string);
+   }
+   else if (n_log_dest == 1) { /* output via syslog */
+-    syslog(priority, string);
++    syslog(priority, "%s", string);
+   }
+   else { /* output in user-defined logfile */
+     time(&the_time);
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/refdb-client.c refdb-0.9.9-1-fix-format-errors/src/refdb-client.c
+--- refdb-0.9.9-1/src/refdb-client.c	2007-07-10 23:40:48.000000000 +0200
++++ refdb-0.9.9-1-fix-format-errors/src/refdb-client.c	2009-03-11 23:25:09.000000000 +0100
+@@ -133,7 +133,7 @@
+   /* read status */
+   if ((cs_status = read_status(n_sockfd))) {
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     return 1;
+   }
+@@ -217,7 +217,7 @@
+   if (!n_cgi) {
+     if (strncmp(arg, "-h", 2) == 0) {
+       cgi_header(CGI_PLAIN);
+-      fprintf(errstream, help_string);
++      fprintf(errstream, "%s", help_string);
+       free(slvals.outbuffer);
+       return 0;
+     }
+@@ -311,7 +311,7 @@
+   numbyte = tiwrite(slvals->n_sockfd, slvals->outbuffer, TERM_YES);
+   if (numbyte == -1) {
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(110));
++    fprintf(errstream, "%s", get_status_msg(110));
+     fprintf(errstream, "\n");
+     return 1;
+   }
+@@ -324,7 +324,7 @@
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+     cgi_header(CGI_PLAIN);
+-    fprintf(errstream, get_status_msg(cs_status));
++    fprintf(errstream, "%s", get_status_msg(cs_status));
+     fprintf(errstream, "\n");
+     if (n_with_summary != 2) {
+       return 1;
+@@ -399,7 +399,7 @@
+       if (cs_status != 0 /* success */
+ 	  && cs_status != 803) { /* partial success */
+ 	cgi_header(CGI_PLAIN);
+-	fprintf(errstream, get_status_msg(cs_status));
++	fprintf(errstream, "%s", get_status_msg(cs_status));
+ 	return 1;
+       }
+ 
+@@ -562,7 +562,7 @@
+ /*        fflush(stdout); */
+     if (n_result < n_chunksize && !feof(infp)) {
+       /* no more data available */
+-      fprintf(errstream, get_status_msg(401));
++      fprintf(errstream, "%s", get_status_msg(401));
+       fprintf(errstream, "\n");
+       send_status(n_sockfd, 401, TERM_NO);
+       free(buffer);
+@@ -591,7 +591,7 @@
+       /* PHASE 2 */
+       /* wait for acknowledgement of database server */
+       if ((cs_status = read_status(n_sockfd))) {
+-	fprintf(errstream, get_status_msg(cs_status));
++	fprintf(errstream, "%s", get_status_msg(cs_status));
+ 	fprintf(errstream, "\n");
+ 	return 1;
+       }
+@@ -620,7 +620,7 @@
+ 	  /*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	  if (numbyte == -1) {
+ 	    /* timeout while reading */
+-	    fprintf(errstream, get_status_msg(109));
++	    fprintf(errstream, "%s", get_status_msg(109));
+ 	    return 3;
+ 	  }
+ 
+@@ -708,7 +708,7 @@
+ 
+       if (n_result == 0) {
+ 	cgi_header(CGI_PLAIN);
+-	fprintf(errstream, get_status_msg(401));
++	fprintf(errstream, "%s", get_status_msg(401));
+ 	fprintf(errstream, "\n");
+ 	send_status(n_sockfd, 401, TERM_NO);
+ 	return 1;
+@@ -739,7 +739,7 @@
+       /* PHASE 2 */
+       /* wait for acknowledgement of database server */
+       if ((cs_status = read_status(n_sockfd))) {
+-	fprintf(errstream, get_status_msg(cs_status));
++	fprintf(errstream, "%s", get_status_msg(cs_status));
+ 	fprintf(errstream, "\n");
+ 	return 1;
+       }
+@@ -771,7 +771,7 @@
+ 	  numbyte = tread(n_sockfd, inbuffer, OUTBUF_LEN);
+ 	  if (numbyte == -1) {
+ 	    cgi_header(CGI_PLAIN);
+-	    fprintf(errstream, get_status_msg(109));
++	    fprintf(errstream, "%s", get_status_msg(109));
+ 	    return 3;
+ 	  }
+ 	  
+@@ -842,7 +842,7 @@
+       }
+ 
+       if (numbyte == -1) {
+-	fprintf(stderr, get_status_msg(109));
++	fprintf(stderr, "%s", get_status_msg(109));
+ 	fprintf(stderr, "\n");
+ 	*ptr_error = 1;
+ 	return 0;
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/refdbd.c refdb-0.9.9-1-fix-format-errors/src/refdbd.c
+--- refdb-0.9.9-1/src/refdbd.c	2007-11-01 23:34:09.000000000 +0100
++++ refdb-0.9.9-1-fix-format-errors/src/refdbd.c	2009-03-11 23:09:30.000000000 +0100
+@@ -2233,7 +2233,7 @@
+       n_reopen_log = 0;
+       LOG_PRINT(LOG_INFO, "reopened log file");
+     }
+-    syslog(priority, string);
++    syslog(priority, "%s", string);
+   }
+   else { /* output in user-defined logfile */
+     if (n_reopen_log) { /* log filename or destination has changed*/
+diff -Naur --exclude '*~' refdb-0.9.9-1/src/refdbib.c refdb-0.9.9-1-fix-format-errors/src/refdbib.c
+--- refdb-0.9.9-1/src/refdbib.c	2007-09-10 21:19:40.000000000 +0200
++++ refdb-0.9.9-1-fix-format-errors/src/refdbib.c	2009-03-11 23:20:44.000000000 +0100
+@@ -642,7 +642,7 @@
+   numbyte = tiwrite(slvals.n_sockfd, slvals.outbuffer, TERM_YES);
+   if (numbyte == -1) {
+     free(slvals.outbuffer);
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(110));
+     close(slvals.n_sockfd);
+@@ -653,7 +653,7 @@
+ 
+   if (cs_status && cs_status != 402) {
+     free(slvals.outbuffer);
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(cs_status));
+     close(slvals.n_sockfd);
+@@ -701,7 +701,7 @@
+     cs_status = read_status(slvals.n_sockfd);
+ 
+     if (cs_status) {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       LOG_PRINT(LOG_WARNING, get_status_msg(cs_status));
+       free(slvals.outbuffer);
+@@ -739,7 +739,7 @@
+ 	/*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	if (numbyte == -1) {
+ 	  /* timeout while reading */
+-	  fprintf(stderr, get_status_msg(109));
++	  fprintf(stderr, "%s", get_status_msg(109));
+ 	  return 1;
+ 	}
+ 	
+@@ -757,7 +757,7 @@
+       } while (!n_read_done);
+     }
+     else {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       return 1;
+     }
+@@ -783,7 +783,7 @@
+       n_done_refs++;
+     }
+     else if (cs_status != 404) {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       LOG_PRINT(LOG_WARNING, get_status_msg(cs_status));
+       free(slvals.outbuffer);
+@@ -810,7 +810,7 @@
+ 
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(109));
+     free(slvals.outbuffer);
+@@ -982,7 +982,7 @@
+   numbyte = 0;
+ 
+   if ((cs_status = read_status(slvals.n_sockfd)) != 0) { /* read step 2 */
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     close(slvals.n_sockfd);
+     free(slvals.outbuffer);
+@@ -1017,7 +1017,7 @@
+ 	/*   	printf("phase4 server reply:%s<<\n", inbuffer); */
+ 	if (numbyte == -1) {
+ 	  /* timeout while reading */
+-	  fprintf(stderr, get_status_msg(109));
++	  fprintf(stderr, "%s", get_status_msg(109));
+ 	  free(slvals.outbuffer);
+ 	  return 1;
+ 	}
+@@ -1036,7 +1036,7 @@
+       } while (!n_read_done);
+     }
+     else {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       free(slvals.outbuffer);
+       return 1;
+@@ -1070,7 +1070,7 @@
+ 
+     if (cs_status != 402 /* last dataset */
+ 	&& cs_status != 404) { /* finished dataset */
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       if (slvals.n_file_open || slvals.n_file_append) {
+ 	close_outfile(pagerfp);
+@@ -1110,7 +1110,7 @@
+ 	
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     free(slvals.outbuffer);
+     return 1;
+@@ -1118,7 +1118,7 @@
+ 
+   numbyte = tread(slvals.n_sockfd, slvals.inbuffer, OUTBUF_LEN);
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     fprintf(stderr, "\n");
+     n_broken_pipe = 0;
+     free(slvals.outbuffer);
+@@ -1143,7 +1143,7 @@
+   free(slvals.outbuffer);
+   close(slvals.n_sockfd);
+ 
+-  fprintf(stderr, slvals.inbuffer);
++  fprintf(stderr, "%s", slvals.inbuffer);
+ 
+   return 0;
+ }
+@@ -1250,7 +1250,7 @@
+   LOG_PRINT(LOG_DEBUG, cmd_buffer);
+ 
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(110));
+     retval = 1;
+@@ -1261,7 +1261,7 @@
+   cs_status = read_status(slvals.n_sockfd); /* #2 */
+ 
+   if (cs_status) {
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(cs_status));
+     retval = 1;
+@@ -1274,7 +1274,7 @@
+   LOG_PRINT(LOG_DEBUG, slvals.outbuffer);
+ 
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(110));
++    fprintf(stderr, "%s", get_status_msg(110));
+     fprintf(stderr, "\n");
+     LOG_PRINT(LOG_WARNING, get_status_msg(110));
+     retval = 1;
+@@ -1305,7 +1305,7 @@
+ 
+     if (cs_status != 402
+ 	&& cs_status != 404) {
+-      fprintf(stderr, get_status_msg(cs_status));
++      fprintf(stderr, "%s", get_status_msg(cs_status));
+       fprintf(stderr, "\n");
+       LOG_PRINT(LOG_WARNING, get_status_msg(cs_status));
+       if (slvals.n_file_open || slvals.n_file_append) {
+@@ -1327,7 +1327,7 @@
+     do { /* loop until a terminated string is complete */
+       numbyte = tread(slvals.n_sockfd, slvals.inbuffer, OUTBUF_LEN); /* #6 ok */
+       if (numbyte == -1) {
+-	fprintf(stderr, get_status_msg(109));
++	fprintf(stderr, "%s", get_status_msg(109));
+ 	fprintf(stderr, "\n");
+ 	if (slvals.n_file_open || slvals.n_file_append) {
+ 	  close_outfile(pagerfp);
+@@ -1384,7 +1384,7 @@
+ 	
+   if (cs_status != 0 /* success */
+       && cs_status != 803) { /* partial success */
+-    fprintf(stderr, get_status_msg(cs_status));
++    fprintf(stderr, "%s", get_status_msg(cs_status));
+     fprintf(stderr, "\n");
+     if (slvals.n_file_open || slvals.n_file_append) {
+       close_outfile(pagerfp);
+@@ -1398,7 +1398,7 @@
+ 	
+   numbyte = tread(slvals.n_sockfd, slvals.inbuffer, OUTBUF_LEN); /* #8 ok */
+   if (numbyte == -1) {
+-    fprintf(stderr, get_status_msg(109));
++    fprintf(stderr, "%s", get_status_msg(109));
+     fprintf(stderr, "\n");
+     n_broken_pipe = 0;
+     if (slvals.n_file_open || slvals.n_file_append) {
+@@ -1421,7 +1421,7 @@
+     closepager(pagerfp);
+   }
+ 
+-  fprintf(stderr, slvals.inbuffer);
++  fprintf(stderr, "%s", slvals.inbuffer);
+ 
+  Finish:
+   /* closing the socket in the background apparently does not work if
+@@ -1456,7 +1456,7 @@
+     fprintf(stderr, "%s\n", string);
+   }
+   else if (n_log_dest == 1) { /* output via syslog */
+-    syslog(priority, string);
++    syslog(priority, "%s", string);
+   }
+   else { /* output in user-defined logfile */
+     time(&the_time);

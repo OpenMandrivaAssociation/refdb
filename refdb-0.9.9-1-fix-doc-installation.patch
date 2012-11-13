@@ -1,0 +1,57 @@
+diff -Naur -x '*~' refdb-0.9.9-1/doc/Makefile.am refdb-0.9.9-1-fix-doc-installation/doc/Makefile.am
+--- refdb-0.9.9-1/doc/Makefile.am	2007-08-11 13:48:21.000000000 +0200
++++ refdb-0.9.9-1-fix-doc-installation/doc/Makefile.am	2010-02-07 21:28:15.000000000 +0100
+@@ -1,46 +1,13 @@
+ ## Process this with automake to create Makefile.in
+ 
+-docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/refdb-manual
+-doc_DATA = refdb-manual.pdf refdb-manual/*
++doc_DATA = refdb-manual.pdf index.html
+ 
+-indexdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/
+-index_DATA = index.html
+-
+-citestylexdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citestylex
+-citestylex_DATA = citestylex/*
+-citestylexdtdelemdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citestylex/dtdelem
+-citestylexdtdelem_DATA = citestylex/dtdelem/*
+-citestylexeledescdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citestylex/ele-desc
+-citestylexeledesc_DATA = $(top_srcdir)/doc/citestylex/ele-desc/*.html
+-citestylexelementsdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citestylex/elements
+-citestylexelements_DATA = citestylex/elements/*
+-
+-risxdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/risx
+-risx_DATA = risx/*
+-risxdtdelemdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/risx/dtdelem
+-risxdtdelem_DATA = risx/dtdelem/*
+-risxeledescdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/risx/ele-desc
+-risxeledesc_DATA = $(top_srcdir)/doc/risx/ele-desc/*.html
+-risxelementsdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/risx/elements
+-risxelements_DATA = risx/elements/*
+-
+-citationlistxdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citationlistx
+-citationlistx_DATA = citationlistx/*
+-citationlistxdtdelemdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citationlistx/dtdelem
+-citationlistxdtdelem_DATA = citationlistx/dtdelem/*
+-citationlistxeledescdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citationlistx/ele-desc
+-citationlistxeledesc_DATA = $(top_srcdir)/doc/citationlistx/ele-desc/*.html
+-citationlistxelementsdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/citationlistx/elements
+-citationlistxelements_DATA = citationlistx/elements/*
+-
+-xnotedir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/xnote
+-xnote_DATA = xnote/*
+-xnotedtdelemdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/xnote/dtdelem
+-xnotedtdelem_DATA = xnote/dtdelem/*
+-xnoteeledescdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/xnote/ele-desc
+-xnoteeledesc_DATA = $(top_srcdir)/doc/xnote/ele-desc/*.html
+-xnoteelementsdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)/xnote/elements
+-xnoteelements_DATA = xnote/elements/*
++install-data-hook:
++	cp -pr refdb-manual $(DESTDIR)$(docdir)
++	cp -pr citestylex $(DESTDIR)$(docdir)
++	cp -pr risx $(DESTDIR)$(docdir)
++	cp -pr citationlistx $(DESTDIR)$(docdir)
++	cp -pr xnote $(DESTDIR)$(docdir)
+ 
+ ####################################################################
+ # the manual

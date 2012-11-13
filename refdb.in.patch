@@ -1,0 +1,86 @@
+--- scripts/refdb.in_orig	2006-08-24 21:53:55.000000000 +0200
++++ scripts/refdb.in	2006-09-20 18:46:46.000000000 +0200
+@@ -3,6 +3,21 @@
+ # refdb: Start the refdb bibliography tool application server
+ #        (for use as init.d or rc.d script)
+ #
++# chkconfig: 2345 93 7
++# description: Starts and stops the RefDB daemon
++#
++# processname: refdbd
++# pidfile: /var/run/refdbd.pid
++
++### BEGIN INIT INFO
++# Provides: refdb
++# Required-Start: $network
++# Required-Stop: $network
++# Default-Start: 2 3 4 5
++# Description: RefDB is a reference database and bibliography tool for SGML, XML, and LaTeX/BibTeX documents
++# Short-Description: RefDB, bibliography database
++### END INIT INFO
++
+ # markus@mhoenicka.de 2001-7-22
+ 
+ # This program is free software; you can redistribute it and/or modify
+@@ -32,7 +47,7 @@
+ NAME=refdb
+ 
+ # set some default path
+-PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin
++#PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin
+ 
+ # the full path to the binary that is to be started as a daemon
+ DAEMON=<prefix>/bin/refdbd
+@@ -46,6 +61,33 @@
+ # magic, but it makes the screen messages at startup match the OS style
+ BSDSTYLE=NO
+ 
++# Source function library
++. /etc/init.d/functions
++
++. /etc/sysconfig/network
++
++# Check that networking is configured.
++[ ${NETWORKING} = "no" ] && exit 0
++
++REFDB_BIN=/usr/bin/refdbd
++test -x $REFDB_BIN || exit 5
++
++DAEMON_NAME=refdb
++DAEMON_PROCESS=refdbd
++DAEMON_BINARY=/usr/bin/refdbd
++LOCK_FILE=/var/lock/subsys/$DAEMON_NAME
++
++# default option, they can be overriden in /etc/sysconfig/$DAEMON_NAME
++# of course, you can place what you want.
++
++OPTIONS=
++PORT=5432
++
++# this file should be commented, with proper pointer to the doc, and you should use
++# more than one line of option, if possible.
++
++[ -f /etc/sysconfig/$DAEMON_NAME ] && . /etc/sysconfig/$DAEMON_NAME
++
+ # don't get interrupted
+ trap "" 1
+ 
+@@ -69,6 +111,9 @@
+ 	    echo -ne "Stopping bibliography tool application server: $NAME.\n"
+ 	    $REFDBCTL stop
+ 	fi;;
++    status)
++	status refdb
++	;;
+     restart)
+ 	if [ $BSDSTYLE = "YES" ]; then
+ 	    $REFDBCTL restart > /dev/null && echo -n ' refdb'
+@@ -84,7 +129,7 @@
+ 	    $REFDBCTL reload
+ 	fi;;
+     *)
+-	echo "Usage: $(basename $0) {start|stop|restart|force-reload}" >&2
++	echo "Usage: $(basename $0) {start|stop|status|restart|force-reload}" >&2
+ 	exit 1;;
+ esac
+ 
