@@ -1,9 +1,9 @@
-%define rel	2
+%define rel	1
 
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	%mkrel 11
+Release:	11
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
@@ -14,11 +14,11 @@ Patch1:		refdb-0.9.9-1-fix-format-errors.patch
 Patch2:		refdb-0.9.9-1-fix-underlinking.patch
 Patch3:		refdb-0.9.9-1-fix-doc-installation.patch
 Requires:	apache-mod_php => 5
-BuildRequires:	btparse
+BuildRequires:	btparser
 BuildRequires:	libdbi-devel	
-BuildRequires:	libexpat-devel
-BuildRequires:	libncurses-devel
-BuildRequires:	libreadline-devel
+BuildRequires:	expat-devel
+BuildRequires:	pkgconfig(ncurses)
+BuildRequires:	readline-devel
 BuildRequires:	gettext-devel
 BuildRequires:	perl(MARC::Charset)
 BuildRequires:	perl(MARC::Record)
@@ -28,10 +28,6 @@ BuildRequires:	perl(Text::Iconv)
 BuildRequires:	perl(XML::Parser)
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
-%if %mdkversion < 201010
-Requires(postun): rpm-helper
-%endif
-BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
 RefDB is a reference database and bibliography tool for
@@ -61,7 +57,6 @@ autoreconf
 %make
 
 %install
-%{__rm} -rf %{buildroot}
 mkdir -p %{buildroot}/%{_localstatedir}/lib/%{name}/db
 
 # LSB and pinit compliant initscript
@@ -96,26 +91,14 @@ EOF
 
 find %{buildroot}%{_docdir} -name *~ | xargs rm -f
 
-%clean
-%{__rm} -rf	%{buildroot}
-
 %post
-%if %mdkversion < 201010
-%_post_webapp
-%endif
 %_post_service	%{name}
 chmod 1777 %{_datadir}/%{name}
 
 %preun
 %_preun_service	%{name}
 
-%postun
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
-
 %files
-%defattr(-,root,root)
 %{_bindir}/bib2ris-utf8
 %{_bindir}/db2ris
 %{_bindir}/eenc
@@ -146,8 +129,8 @@ chmod 1777 %{_datadir}/%{name}
 %doc README.urpmi AUTHORS ChangeLog INSTALL NEWS README UPGRADING
 
 %files -n %{name}-clients
-%defattr(-,root,root)
 %{_bindir}/refdbc
 %{_bindir}/refdba
 %{_bindir}/refdbib
 %{_bindir}/refdbctl
+

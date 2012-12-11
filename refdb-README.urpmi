@@ -1,0 +1,16 @@
+What you should do next:
+- define the database connector using /etc/refdb/<server>.example
+- Initialise the database using the refdb-init.sh shell script as root, 
+or peruse the handbook if you prefer a manual installation.
+
+Since the database is choosen from a configuration file (and no at the
+compilation step), you need to install your database and the connector 
+prior to configuring RefDB.
+
+For instance for postgresql:
+urpmi postgresql-server
+urpmi libdbi-drivers-dbd-pgsql
+
+WARNING: the web interface seems to lack some functionalities.
+The design is being reworked on by the author but for the moment 
+it is provided as is.
