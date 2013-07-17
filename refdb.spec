@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	12
+Release:	13
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
@@ -72,8 +72,8 @@ install phpweb/includes/*.php	%{buildroot}%{_datadir}/%{name}/includes
 install phpweb/xsl/*.xsl	%{buildroot}%{_datadir}/%{name}/xsl
 
 # apache configuration
-install -d -m 755 %{buildroot}%{webappconfdir}
-cat > %{buildroot}%{webappconfdir}/%{name}.conf << EOF
+install -d -m 755 %{buildroot}%{_webappconfdir}
+cat > %{buildroot}%{_webappconfdir}/%{name}.conf << EOF
 # RefDB Apache configuration
 Alias /%{name} %{_datadir}/%{name}
 
@@ -123,7 +123,7 @@ chmod 1777 %{_datadir}/%{name}
 %{_localstatedir}/lib/%{name}
 %{_mandir}/*/*
 %config(noreplace) %{_sysconfdir}/%{name}
-%config(noreplace) %{webappconfdir}/%{name}.conf
+%config(noreplace) %{_webappconfdir}/%{name}.conf
 %doc doc/*
 %doc README.urpmi AUTHORS ChangeLog INSTALL NEWS README UPGRADING
 
