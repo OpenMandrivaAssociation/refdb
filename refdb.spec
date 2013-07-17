@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	11
+Release:	12
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
@@ -79,8 +79,7 @@ Alias /%{name} %{_datadir}/%{name}
 
 <Directory %{_datadir}/%{name}>
 	Options +ExecCGI
-	Order allow,deny
-	Allow from all
+	Require all granted
 
     php_flag session.auto_start 1
     php_flag register_globals on
