@@ -3,7 +3,7 @@
 Summary:	Reference database and bibliography tool
 Name:		refdb
 Version:	0.9.9
-Release:	13
+Release:	14
 License:	GPLv2+
 Group:		Sciences/Computer science
 URL:		http://refdb.sourceforge.net
