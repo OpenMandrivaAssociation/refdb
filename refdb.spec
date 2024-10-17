@@ -6,7 +6,7 @@ Version:	0.9.9
 Release:	14
 License:	GPLv2+
 Group:		Sciences/Computer science
-URL:		http://refdb.sourceforge.net
+URL:		https://refdb.sourceforge.net
 Source0:	http://prdownloads.sourceforge.net/sourceforge/refdb/%{name}-%{version}-%{rel}.tar.gz
 Source1:	refdb-README.urpmi
 Patch0:		refdb.in.patch
