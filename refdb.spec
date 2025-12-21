@@ -14,6 +14,11 @@ Patch1:		refdb-0.9.9-1-fix-format-errors.patch
 Patch2:		refdb-0.9.9-1-fix-underlinking.patch
 Patch3:		refdb-0.9.9-1-fix-doc-installation.patch
 Requires:	apache-mod_php => 5
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	btparser
 BuildRequires:	libdbi-devel	
 BuildRequires:	expat-devel
